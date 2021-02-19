@@ -197,8 +197,8 @@ export default {
   text-align: center;
 }
 .poster-image {
-  width: 130px;
-  height: 130px;
+  width: 120px;
+  height: 120px;
   position: absolute;
   top: 126px;
   border-radius: 50%;
