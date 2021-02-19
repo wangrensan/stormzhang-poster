@@ -21,7 +21,9 @@ npm run dev
 浏览器访问 [http://localhost:9528](http://localhost:9528)
 
 ## 测试数据
-在根目录下test.xlsx
+```
+根目录下的test.xlsx，导入即可
+```
 
 ## 发布
 
