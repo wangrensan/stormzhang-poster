@@ -14,7 +14,7 @@
     <div v-if="status === 1">当前下载进度：<span :style="{color: progress === '100.00%' ? '#67C23A' : '#409EFF'}">{{progress}}</span></div>
     <div class="poster-list" v-if="list.length">
       <div class="poster-item" v-for="(item, index) in list" :key="index" :style="{'background-image': 'url(' + require(`../../assets/images/template_${item.template}.png`) + ')'}">
-        <div class="poster-no">{{item.no}}</div>
+        <div class="poster-no">星球编号：{{item.no}}</div>
         <div class="poster-name">{{item.name}}</div>
         <div class="poster-image">
           <img :src="item.image" width="100%" height="100%" crossorigin="anonymous">
@@ -181,45 +181,33 @@ export default {
 }
 .poster-no {
   position: absolute;
-  top: 75px;
+  bottom: 210px;
   color: #fff;
   font-size: 17px;
-  left: 260px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 .poster-name {
   position: absolute;
-  top: 52px;
-  left: 65px;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
   color: #fff;
   font-size: 27px;
   font-weight: 600;
-  width: 20px;
+  // width: 20px;
   text-align: center;
 }
 .poster-image {
   width: 120px;
   height: 120px;
   position: absolute;
-  top: 126px;
+  top: 131px;
   border-radius: 50%;
   left: 50%;
   transform: translateX(-50%);
   background-size: cover;
   overflow: hidden;
-}
-.poster-desc {
-  position: absolute;
-  bottom: 136px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  width: 240px;
-  opacity: 0.5;
-  line-height: 46px;
-  padding: 0 10px;
-
 }
 .poster-desc span {
   font-size: 26px;
