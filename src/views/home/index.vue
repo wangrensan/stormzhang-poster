@@ -44,14 +44,7 @@ export default {
   name: 'Home',
   data () {
     return {
-      list: [
-        {
-          image: "https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3202386446,3057899623&fm=26&gp=0.jpg",
-          name: "帅张一号帅张一号帅",
-          no: 1101,
-          template: 1,
-        },
-      ],
+      list: [],
       fileLength: 0, // 当前下载的文件数量
       status: 0, // 是否开始下载
     }
