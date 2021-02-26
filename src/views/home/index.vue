@@ -13,9 +13,10 @@
     </div>
     <div v-if="status === 1">当前下载进度：<span :style="{color: progress === '100.00%' ? '#67C23A' : '#409EFF'}">{{progress}}</span></div>
     <div class="poster-list" v-if="list.length">
-      <div class="poster-item" v-for="(item, index) in list" :key="index" :style="{'background-image': 'url(' + require(`../../assets/images/template_${item.template}.png`) + ')'}">
+      <div class="poster-item" v-for="(item, index) in list" :key="index">
+        <img class="poster-background" :src="require(`../../assets/images/template_${item.template}.png`)" alt="" srcset="">
         <div class="poster-no">星球编号：{{item.no}}</div>
-        <div class="poster-name">{{item.name}}</div>
+        <div class="poster-name" :style="{'font-size': `${Math.min((190 / item.name.length), 27)}px`}">{{item.name}}</div>
         <div class="poster-image">
           <img :src="item.image" width="100%" height="100%" crossorigin="anonymous">
         </div>
@@ -43,7 +44,14 @@ export default {
   name: 'Home',
   data () {
     return {
-      list: [],
+      list: [
+        {
+          image: "https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3202386446,3057899623&fm=26&gp=0.jpg",
+          name: "帅张一号帅张一号帅",
+          no: 1101,
+          template: 1,
+        },
+      ],
       fileLength: 0, // 当前下载的文件数量
       status: 0, // 是否开始下载
     }
@@ -79,20 +87,34 @@ export default {
     },
     addToZip(ele, zip, name) {
         return new Promise(async (resolve, reject) => {
-            const canvas = await html2canvas(ele, {
-              logging: false, //日志开关，便于查看html2canvas的内部执行流程
-              width: ele.clientWidth, //dom 原始宽度
-              height: ele.clientHeight,
-              scrollY: 0, 
-              scrollX: 0,
-              useCORS: true // 【重要】开启跨域配置
-            })
-            canvas.toBlob((blob) => {
-                zip.file(name, blob);  // 将每次不同的canvas数据添加到zip文件中
-                this.fileLength++
-                console.log('完成了', this.fileLength)
-                resolve();
-            });
+          let scaleCanvas = document.createElement("canvas"); 
+          const context = scaleCanvas.getContext("2d");
+          const scale = 2; 
+          const width = ele.clientWidth
+          const height = ele.clientHeight
+
+          scaleCanvas.width = width * scale
+          scaleCanvas.height = height * scale
+          scaleCanvas.getContext("2d").scale(scale, scale)
+
+          const canvas = await html2canvas(ele, {
+            logging: false, //日志开关，便于查看html2canvas的内部执行流程
+            width, //dom 原始宽度
+            height,
+            scrollY: 0, 
+            scrollX: 0,
+            canvas,
+            scale,
+            dpi: window.devicePixelRatio * 4,
+            useCORS: true // 【重要】开启跨域配置
+          })
+
+          console.log(canvas)
+          canvas.toBlob((blob) => {
+              zip.file(name, blob);  // 将每次不同的canvas数据添加到zip文件中
+              this.fileLength++
+              resolve();
+          });
         })
     },
     createZip() {
@@ -179,10 +201,17 @@ export default {
   margin-bottom: 10px;
   position: relative;
 }
+.poster-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 .poster-no {
   position: absolute;
   bottom: 210px;
-  color: #fff;
+  color: rgb(253, 253, 253);
   font-size: 17px;
   left: 50%;
   transform: translateX(-50%);
@@ -192,17 +221,19 @@ export default {
   top: 70px;
   left: 50%;
   transform: translateX(-50%);
-  color: #fff;
+  color: rgb(253, 253, 253);
   font-size: 27px;
   font-weight: 600;
-  // width: 20px;
+  width: 190px;
+  white-space:nowrap;
   text-align: center;
+  overflow: hidden;
 }
 .poster-image {
   width: 120px;
   height: 120px;
   position: absolute;
-  top: 131px;
+  top: 132px;
   border-radius: 50%;
   left: 50%;
   transform: translateX(-50%);
